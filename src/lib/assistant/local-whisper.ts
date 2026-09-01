@@ -10,7 +10,9 @@ let loading = false;
 export async function transcribeLocalWhisper(audio: Blob, onStatus?: (status: string) => void) {
   if (typeof window === "undefined") return "";
   onStatus?.("Po përgatit dëgjimin shqip…");
-  const ctx = new AudioContext();
+  const AudioCtx = window.AudioContext || (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+  if (!AudioCtx) throw new Error("AudioContext nuk mbështetet në këtë browser.");
+  const ctx = new AudioCtx();
   try {
     const pcm = await ctx.decodeAudioData(await audio.arrayBuffer());
     const mono = pcm.numberOfChannels === 1 ? pcm.getChannelData(0) : mixToMono(pcm);
@@ -19,18 +21,14 @@ export async function transcribeLocalWhisper(audio: Blob, onStatus?: (status: st
       loading = true;
       transcriberPromise = pipeline(
         "automatic-speech-recognition",
-        "onnx-community/whisper-small",
-        { device: "webgpu", dtype: "q4" } as any,
-      ).catch(() => pipeline(
-        "automatic-speech-recognition",
-        "onnx-community/whisper-small",
+        "onnx-community/whisper-tiny",
         { device: "wasm", dtype: "q8" } as any,
-      )).finally(() => { loading = false; });
+      ).finally(() => { loading = false; });
     }
     if (loading) onStatus?.("Modeli falas po shkarkohet një herë…");
     const transcriber = await transcriberPromise;
     onStatus?.("Po kuptoj shqipen…");
-    const result = await transcriber(target, { language: "albanian", task: "transcribe", return_timestamps: false });
+    const result = await transcriber(target, { language: "sq", task: "transcribe", return_timestamps: false });
     return String(result?.text || "").replace(/\s+/g, " ").trim();
   } finally {
     await ctx.close().catch(() => undefined);
