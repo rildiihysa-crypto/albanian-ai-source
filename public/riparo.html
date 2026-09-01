@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="sq">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#050505" />
+    <title>Albanian AI</title>
+    <style>
+      html, body { margin: 0; background: #050505; color: #f4f4f4; font-family: -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif; }
+      body { min-height: 100svh; display: grid; place-items: center; padding: 24px; text-align: center; }
+      p { color: #bdbdbd; }
+      button {
+        height: 44px; padding: 0 18px; border: 0; border-radius: 12px;
+        background: #a7192e; color: #fff; font-weight: 700; font-size: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <p>Po pastron versionin e vjetër dhe hap Albanian AI…</p>
+      <button id="go" type="button">Hap Albanian AI</button>
+    </div>
+    <script>
+      function openApp() {
+        location.replace("/app?v=" + Date.now());
+      }
+      document.getElementById("go").onclick = openApp;
+      setTimeout(openApp, 200);
+    </script>
+  </body>
+</html>

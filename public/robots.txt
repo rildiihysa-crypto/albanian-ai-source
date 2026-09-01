@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+Allow: /*.jpg
+Allow: /*.png
+Allow: /*.svg
+Disallow: /api/
+Disallow: /__grok/
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
+
+Sitemap: https://www.albanianai.it/sitemap.xml
+Sitemap: https://albanianai.it/sitemap.xml
