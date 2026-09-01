@@ -1,6 +1,6 @@
 {
   "name": "Albanian AI",
-  "version": "1.45.1",
-  "build": 219,
-  "notes": "Live chat shqip kalon gjithmonë nga VAD dhe Whisper server-side, me fallback Groq, pastaj zërin Ilir."
+  "version": "1.46.0",
+  "build": 220,
+  "notes": "Live chat përdor Whisper lokal falas në pajisje për shqipen, me fallback server-side dhe zërin Ilir."
 }

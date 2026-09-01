@@ -80,6 +80,7 @@ import {
 } from "@/lib/assistant/browser-voice";
 import { extractLocalFile } from "@/lib/assistant/extract-file";
 import { detectLang } from "@/lib/assistant/lang";
+import { transcribeLocalWhisper } from "@/lib/assistant/local-whisper";
 import { canLiveListen, isAssistantEcho, startLiveListen, type LiveListenHandle } from "@/lib/assistant/live-listen";
 import { startRealtimeVoice, type RealtimeSession } from "@/lib/assistant/realtime-client";
 import { parseGeneratedImage, wantsGeneratedImage } from "@/lib/assistant/imagine-detect";
@@ -810,7 +811,10 @@ export function Workspace() {
 		}
 		try {
 			setMicError(void 0);
-			const text = (await transcribeSpeech({ data: {
+			const localText = prefsRef.current.language !== "it" && prefsRef.current.language !== "en"
+				? await transcribeLocalWhisper(blob, setMicError).catch(() => "")
+				: "";
+			const text = localText || (await transcribeSpeech({ data: {
 				audioBase64: await blobToBase64(blob),
 				mimeType: blob.type || "audio/wav",
 				lang: prefsRef.current.language,
