@@ -7,10 +7,12 @@ import * as db from "./db";
 import { getSql } from "@/lib/db";
 import { CREATOR, isOwnerEmail } from "@/lib/site";
 import { todaySpoken } from "./clock";
+import { detectLang } from "./lang";
 import { DEFAULT_PREFS, parseChatMode, type ChatMode, type ChatRole, type Lang } from "./types";
 import { USER_GEMINI_API_KEY, USER_GROQ_API_KEY, USER_XAI_API_KEY, xaiKey, xaiKeys } from "./voice-secret.server";
 import { readUsageCounts, usagePrompt } from "./usage.server";
 import { closeVoiceBridge, sendVoiceBridge, takeVoiceEvents } from "./voice-bridge.server";
+import { transcribeWhisperSq } from "./stt-whisper-sq";
 
 const requestLog = new Map<string, number[]>();
 const MAX_CHAT_REQUESTS = 80;
@@ -327,7 +329,7 @@ export const seeLiveFrame = createServerFn({ method: "POST" })
         : data.language === "en"
           ? "Describe everything visible: objects, text, brands, food, people, documents. Be concrete and short."
           : "Përshkruaj gjithçka që shihet: objekte, tekst, marka, ushqim, njerëz, dokumente. Jii konkret dhe i shkurtër.";
-    const seen = await askGeminiVision(prompt, data.imageDataUrl, data.language);
+    const seen = await askGeminiVision(prompt, data.imageDataUrl, data.language as Lang);
     return { seen: (seen || "").slice(0, 900) };
   });
 
@@ -677,7 +679,6 @@ export const transcribeSpeech = createServerFn({ method: "POST" })
       /* live chat must keep listening */
     }
     const apiKey = xaiKey();
-    if (!apiKey) throw new Error("Dëgjimi me zë nuk është i disponueshëm tani.");
     const bytes = Buffer.from(data.audioBase64, "base64");
     if (bytes.length < 400) throw new Error("Nuk dëgjova asgjë. Prek PARLA dhe fol më afër.");
     const ext = data.mimeType.includes("wav")
@@ -690,16 +691,23 @@ export const transcribeSpeech = createServerFn({ method: "POST" })
           ? "mp3"
           : "webm";
     const lang = data.lang === "it" || data.lang === "en" ? data.lang : "sq";
-    let text = (await sttGemini(bytes, data.mimeType, lang).catch((error) => {
-      console.warn("[STT Gemini]", error);
-      return "";
-    })) || "";
-    if (!text || looksGarbled(text, lang)) {
+    if (lang !== "sq" && !apiKey) throw new Error("Dëgjimi me zë nuk është i disponueshëm tani.");
+    // Albanian live listening is server-side Whisper first; never use browser Safari STT.
+    let text = lang === "sq"
+      ? await transcribeWhisperSq(bytes, data.mimeType, ext).catch((error) => {
+          console.warn("[STT Whisper SQ]", error);
+          return "";
+        })
+      : (await sttGemini(bytes, data.mimeType, lang).catch((error) => {
+          console.warn("[STT Gemini]", error);
+          return "";
+        })) || "";
+    if ((!text || looksGarbled(text, lang)) && lang !== "sq") {
       const groq = await sttGroq(bytes, data.mimeType, ext, lang).catch(() => "");
       if (groq && !looksGarbled(groq, lang)) text = groq;
       else if (!text && groq) text = groq;
     }
-    if (!text || looksGarbled(text, lang)) {
+    if ((!text || looksGarbled(text, lang)) && lang !== "sq") {
       const xai = await sttXai(apiKey, bytes, data.mimeType, ext, lang).catch(() => "");
       if (xai && !looksGarbled(xai, lang)) text = xai;
       else if (!text && xai) text = xai;

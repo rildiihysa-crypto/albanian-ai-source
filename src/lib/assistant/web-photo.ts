@@ -45,7 +45,7 @@ async function openverseUrls(query: string): Promise<string[]> {
   const data = (await getJson(url, 7_000)) as { results?: { url?: string; thumbnail?: string }[] };
   return (data.results ?? [])
     .flatMap((item) => [item.thumbnail, item.url])
-    .filter((src): src is string => Boolean(src) && !/\.svg($|\?)/i.test(src));
+    .filter((src): src is string => typeof src === "string" && !/\.svg($|\?)/i.test(src));
 }
 
 async function downloadPhoto(url: string) {
