@@ -928,6 +928,8 @@ export function Workspace() {
 		}, 80);
 	};
 	const startGeminiListen = () => {
+		// Albanian must always use VAD + server-side Whisper; browser SpeechRecognition mangles sq.
+		if (prefsRef.current.language !== "it" && prefsRef.current.language !== "en") return false;
 		if (speechFailed.current || !canLiveListen()) return false;
 		listenRef.current?.stop();
 		listenRef.current = startLiveListen({
