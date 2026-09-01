@@ -811,15 +811,15 @@ export function Workspace() {
 		}
 		try {
 			setMicError(void 0);
-			const localText = prefsRef.current.language !== "it" && prefsRef.current.language !== "en"
-				? await transcribeLocalWhisper(blob, setMicError).catch(() => "")
-				: "";
-			const text = localText || (await transcribeSpeech({ data: {
+			const serverText = (await transcribeSpeech({ data: {
 				audioBase64: await blobToBase64(blob),
 				mimeType: blob.type || "audio/wav",
 				lang: prefsRef.current.language,
 				guestId: guestId()
 			} })).text.trim();
+			const text = serverText || (prefsRef.current.language !== "it" && prefsRef.current.language !== "en"
+				? await transcribeLocalWhisper(blob, setMicError).catch(() => "")
+				: "");
 			if (!text || /^[A-Za-z]{1,4}\.?$/.test(text) || /[\u0400-\u04FF]/.test(text)) {
 				setMicError("Nuk të kuptova. Fol përsëri, pak më qartë.");
 				if (handsFreeRef.current) window.setTimeout(() => void startParla(), 500);
