@@ -23,7 +23,9 @@ function edgeVoice(lang: string) {
 
 async function edgeSpeak(text: string, lang: string) {
   const tts = new EdgeTTS();
-  await tts.synthesize(text, edgeVoice(lang), { rate: "8%", pitch: "0Hz" });
+  // A near-natural pace and a subtle pitch lift sound warmer on phone speakers
+  // than the previous fast, flat delivery.
+  await tts.synthesize(text, edgeVoice(lang), { rate: "0%", pitch: "+1Hz" });
   const b64 = tts.toBase64();
   return b64 ? Buffer.from(b64, "base64") : null;
 }
