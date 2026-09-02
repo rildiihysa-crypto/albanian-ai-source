@@ -1,89 +1,47 @@
-import { authClient, authEnabled } from "@/lib/auth/client";
-import { Loader2, ShieldCheck } from "lucide-react";
+import { ShieldCheck } from "lucide-react";
 import { useEffect, useState, type FormEvent } from "react";
 import { toast } from "sonner";
 
+const GUEST_NAME_KEY = "albanian-ai-guest-name";
+
 export function AuthCard({
-  eyebrow = "LLOgaria jote",
-  title = "Meet Albanian AI.",
-  note = "Krijo llogarinë tënde direkt te Albanian AI. Bisedat mbeten vetëm te llogaria jote.",
+  eyebrow = "MIRË SE ERDHE",
+  title = "Vazhdo me Albanian AI",
+  note = "Shkruaj vetëm emrin dhe mbiemrin për të filluar. Nuk kërkohet email ose fjalëkalim.",
 }: {
   eyebrow?: string;
   title?: string;
   note?: string;
 }) {
-  const [mode, setMode] = useState<"signup" | "signin">("signup");
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [busy, setBusy] = useState<string | null>(null);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
 
   useEffect(() => {
     try {
-      const hint = new URLSearchParams(window.location.search).get("hint") || "";
-      if (hint.includes("@")) {
-        setEmail(hint.trim().toLowerCase());
-        setMode("signin");
-      }
+      const saved = localStorage.getItem(GUEST_NAME_KEY)?.trim() || "";
+      const parts = saved.split(/\s+/).filter(Boolean);
+      setFirstName(parts[0] || "");
+      setLastName(parts.slice(1).join(" "));
     } catch {
-      /* ignore */
+      /* storage unavailable — the name can still be entered for this visit */
     }
   }, []);
 
-  const submitEmail = async (event: FormEvent<HTMLFormElement>) => {
+  const submitName = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const form = event.currentTarget;
-    const data = new FormData(form);
-    const nextName = String(data.get("name") || name).trim();
-    const nextEmail = String(data.get("email") || email).trim().toLowerCase();
-    const nextPassword = String(data.get("password") || password);
-    setName(nextName);
-    setEmail(nextEmail);
-    setPassword(nextPassword);
-    if (!nextEmail || nextPassword.length < 8) {
-      toast.error("Shkruaj emailin dhe fjalëkalimin (të paktën 8 shenja).");
+    const first = firstName.trim();
+    const last = lastName.trim();
+    if (!first || !last) {
+      toast.error("Shkruaj emrin dhe mbiemrin.");
       return;
     }
-    setBusy("email");
+    const fullName = `${first} ${last}`.replace(/\s+/g, " ");
     try {
-      if (mode === "signup") {
-        if (!nextName) {
-          toast.error("Shkruaj emrin tënd.");
-          setBusy(null);
-          return;
-        }
-        const { error } = await authClient.signUp.email({
-          email: nextEmail,
-          password: nextPassword,
-          name: nextName,
-        });
-        if (error) {
-          const msg = error.message || "";
-          if (/exist|already|registered/i.test(msg)) {
-            setMode("signin");
-            throw new Error("Kjo email ka llogari. Prek Hyr.");
-          }
-          throw new Error(msg || "Regjistrimi dështoi.");
-        }
-      } else {
-        const { error } = await authClient.signIn.email({
-          email: nextEmail,
-          password: nextPassword,
-        });
-        if (error) {
-          const msg = error.message || "";
-          if (/not found|invalid|credential|password/i.test(msg)) {
-            throw new Error("Email ose fjalëkalim i gabuar. Nëse s’ke llogari, prek «Krijo llogari».");
-          }
-          throw new Error(msg || "Hyrja dështoi.");
-        }
-      }
-      await authClient.getSession();
-      window.location.href = "/";
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Nuk u krye hyrja.");
-      setBusy(null);
+      localStorage.setItem(GUEST_NAME_KEY, fullName);
+    } catch {
+      /* continue even if private browsing blocks storage */
     }
+    window.location.href = "/app";
   };
 
   return (
@@ -96,49 +54,42 @@ export function AuthCard({
       <p>{note}</p>
       <p className="creator-line">Krijuar nga Amarildo Hysa</p>
 
-      <div className="auth-tabs">
-        <button type="button" className={mode === "signup" ? "selected" : ""} onClick={() => setMode("signup")}>
-          Krijo llogari
-        </button>
-        <button type="button" className={mode === "signin" ? "selected" : ""} onClick={() => setMode("signin")}>
-          Hyr
-        </button>
-      </div>
-
-      <form className="auth-form" onSubmit={(event) => void submitEmail(event)}>
-        {mode === "signup" && (
-          <label>
-            Emri
-            <input name="name" autoComplete="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Amarildo" />
-          </label>
-        )}
+      <form className="auth-form" onSubmit={submitName}>
         <label>
-          Email
-          <input name="email" type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="emri@icloud.com" />
-        </label>
-        <label>
-          Fjalëkalimi
+          Emri
           <input
-            name="password"
-            type="password"
-            autoComplete={mode === "signup" ? "new-password" : "current-password"}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Të paktën 8 shenja"
+            name="firstName"
+            autoComplete="given-name"
+            value={firstName}
+            onChange={(event) => setFirstName(event.target.value)}
+            placeholder="Emri"
+            required
           />
         </label>
-        <button className="signin-button" type="submit" disabled={busy !== null}>
-          {busy === "email" ? <Loader2 size={16} className="spin" /> : null}
-          {mode === "signup" ? "Regjistrohu" : "Hyr në llogari"}
+        <label>
+          Mbiemri
+          <input
+            name="lastName"
+            autoComplete="family-name"
+            value={lastName}
+            onChange={(event) => setLastName(event.target.value)}
+            placeholder="Mbiemri"
+            required
+          />
+        </label>
+        <button className="signin-button" type="submit">
+          Vazhdo
         </button>
       </form>
 
       <div className="local-auth-note">
-        {authEnabled ? "Kjo është llogari lokale e Albanian AI — nuk kërkon Google ose Apple." : "Hyrja aktivizohet pas publikimit."}
+        Hyrje lokale në këtë pajisje — pa Google, Apple, email ose fjalëkalim.
       </div>
       <div className="secure-note">
-        <ShieldCheck size={15} /> Të dhënat e tua nuk ndahen me përdorues të tjerë
+        <ShieldCheck size={15} /> Bisedat e kësaj mënyre ruhen vetëm në këtë pajisje dhe nuk janë të dukshme për krijuesin.
       </div>
     </div>
   );
 }
+
+export { GUEST_NAME_KEY };

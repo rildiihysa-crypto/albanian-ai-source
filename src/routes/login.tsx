@@ -11,9 +11,9 @@ function Login() {
   return (
     <main className="signin">
       <AuthCard
-        eyebrow="HYRJE"
-        title="Meet Albanian AI."
-        note="Krijo llogari me email ose hyr me Google. Bisedat mbeten vetëm të tua. Lexo politikën e privatësisë: albanianai.it/privacy"
+        eyebrow="MIRË SE ERDHE"
+        title="Vazhdo me Albanian AI"
+        note="Shkruaj vetëm emrin dhe mbiemrin për të filluar. Nuk kërkohet email ose fjalëkalim."
       />
     </main>
   );

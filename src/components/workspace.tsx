@@ -2055,9 +2055,9 @@ export function Workspace() {
 				className: "guest-save-fab",
 				onClick: () => {
 					stopLiveVoice();
-					setLoginGate(true);
-				},
-				children: "Hap llogari që bisedat të ruhen"
+							setLoginGate(true);
+						},
+						children: "Vendos emrin dhe mbiemrin"
 			}),
 			settingsOpen && /* @__PURE__ */ jsx(SettingsPanel, {
 				prefs,
@@ -2081,10 +2081,10 @@ export function Workspace() {
 					type: "button",
 					onClick: () => setLoginGate(false),
 					children: "Më vonë"
-				}), /* @__PURE__ */ jsx(AuthCard, {
-					title: "Vazhdo me Albanian AI",
-					note: "Hyr me Google ose email për të ruajtur bisedat."
-				})]
+					}), /* @__PURE__ */ jsx(AuthCard, {
+						title: "Vazhdo me Albanian AI",
+						note: "Shkruaj vetëm emrin dhe mbiemrin. Biseda ruhet lokalisht në këtë pajisje."
+					})]
 			}),
 			/* @__PURE__ */ jsx(InstallPrompt, {})
 		]
