@@ -1,4 +1,4 @@
-import { GROK_PROVIDERS, authClient, authEnabled, signIn } from "@/lib/auth/client";
+import { authClient, authEnabled } from "@/lib/auth/client";
 import { Loader2, ShieldCheck } from "lucide-react";
 import { useEffect, useState, type FormEvent } from "react";
 import { toast } from "sonner";
@@ -6,7 +6,7 @@ import { toast } from "sonner";
 export function AuthCard({
   eyebrow = "LLOgaria jote",
   title = "Meet Albanian AI.",
-  note = "Çdo person hyn me Google ose me emailin e tij (edhe iCloud). Bisedat mbeten vetëm te llogaria e tij.",
+  note = "Krijo llogarinë tënde direkt te Albanian AI. Bisedat mbeten vetëm te llogaria jote.",
 }: {
   eyebrow?: string;
   title?: string;
@@ -86,21 +86,6 @@ export function AuthCard({
     }
   };
 
-  const social = async (providerId: string, label: string) => {
-    setBusy(providerId);
-    try {
-      await signIn(providerId, { callbackURL: "/" });
-    } catch (error) {
-      const message = error instanceof Error ? error.message : "";
-      if (/pop-up|popup|blocked/i.test(message)) {
-        toast.error(`Lejo dritaret popup për ${label}, ose krijo llogari me email.`);
-      } else {
-        toast.error(message || `Hyrja me ${label} dështoi. Provo email-in.`);
-      }
-      setBusy(null);
-    }
-  };
-
   return (
     <div className="signin-card">
       <div className="brand-mark large">
@@ -148,25 +133,8 @@ export function AuthCard({
         </button>
       </form>
 
-      <div className="auth-or">ose</div>
-
-      <div className="signin-actions">
-        {authEnabled ? (
-          GROK_PROVIDERS.filter((provider) => provider.idp === "google").map((provider) => (
-            <button
-              key={provider.providerId}
-              type="button"
-              className={provider.idp === "google" ? "signin-button" : "signin-button secondary"}
-              disabled={busy !== null}
-              onClick={() => void social(provider.providerId, provider.label)}
-            >
-              {busy === provider.providerId ? <Loader2 size={16} className="spin" /> : null}
-              Vazhdo me {provider.label}
-            </button>
-          ))
-        ) : (
-          <p>Hyrja sociale hapet pas publikimit.</p>
-        )}
+      <div className="local-auth-note">
+        {authEnabled ? "Kjo është llogari lokale e Albanian AI — nuk kërkon Google ose Apple." : "Hyrja aktivizohet pas publikimit."}
       </div>
       <div className="secure-note">
         <ShieldCheck size={15} /> Të dhënat e tua nuk ndahen me përdorues të tjerë
