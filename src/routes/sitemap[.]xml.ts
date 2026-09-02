@@ -28,11 +28,13 @@ export const Route = createFileRoute("/sitemap.xml")({
       <image:loc>https://www.albanianai.it/albanian-ai-logo.jpg</image:loc>
       <image:title>Albanian AI</image:title>
       <image:caption>Logoja zyrtare e Albanian AI. Asistent shqip, italisht dhe anglisht. Krijuar nga Amarildo Hysa.</image:caption>
+      <image:license>https://www.albanianai.it/license</image:license>
     </image:image>
     <image:image>
       <image:loc>https://www.albanianai.it/logo.jpg</image:loc>
       <image:title>Albanian AI logo</image:title>
       <image:caption>Albanian AI — Amarildo Hysa — www.albanianai.it</image:caption>
+      <image:license>https://www.albanianai.it/license</image:license>
     </image:image>
   </url>
   <url>
@@ -67,6 +69,12 @@ export const Route = createFileRoute("/sitemap.xml")({
     <lastmod>${now}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://www.albanianai.it/license</loc>
+    <lastmod>${now}</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>${origin}/app</loc>

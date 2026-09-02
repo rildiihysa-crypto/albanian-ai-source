@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AmarildoHysaRouteImport } from './routes/amarildo-hysa'
 import { Route as AppRouteImport } from './routes/app'
+import { Route as LicenseRouteImport } from './routes/license'
 import { Route as LinksRouteImport } from './routes/links'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as PrivacyRouteImport } from './routes/privacy'
@@ -38,6 +39,11 @@ const AmarildoHysaRoute = AmarildoHysaRouteImport.update({
 const AppRoute = AppRouteImport.update({
   id: '/app',
   path: '/app',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LicenseRoute = LicenseRouteImport.update({
+  id: '/license',
+  path: '/license',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LinksRoute = LinksRouteImport.update({
@@ -105,6 +111,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/amarildo-hysa': typeof AmarildoHysaRoute
   '/app': typeof AppRoute
+  '/license': typeof LicenseRoute
   '/links': typeof LinksRoute
   '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
@@ -122,6 +129,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/amarildo-hysa': typeof AmarildoHysaRoute
   '/app': typeof AppRoute
+  '/license': typeof LicenseRoute
   '/links': typeof LinksRoute
   '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
@@ -140,6 +148,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/amarildo-hysa': typeof AmarildoHysaRoute
   '/app': typeof AppRoute
+  '/license': typeof LicenseRoute
   '/links': typeof LinksRoute
   '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
@@ -159,6 +168,7 @@ export interface FileRouteTypes {
     | '/'
     | '/amarildo-hysa'
     | '/app'
+    | '/license'
     | '/links'
     | '/login'
     | '/privacy'
@@ -176,6 +186,7 @@ export interface FileRouteTypes {
     | '/'
     | '/amarildo-hysa'
     | '/app'
+    | '/license'
     | '/links'
     | '/login'
     | '/privacy'
@@ -193,6 +204,7 @@ export interface FileRouteTypes {
     | '/'
     | '/amarildo-hysa'
     | '/app'
+    | '/license'
     | '/links'
     | '/login'
     | '/privacy'
@@ -211,6 +223,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AmarildoHysaRoute: typeof AmarildoHysaRoute
   AppRoute: typeof AppRoute
+  LicenseRoute: typeof LicenseRoute
   LinksRoute: typeof LinksRoute
   LoginRoute: typeof LoginRoute
   PrivacyRoute: typeof PrivacyRoute
@@ -246,6 +259,13 @@ declare module '@tanstack/react-router' {
       path: '/app'
       fullPath: '/app'
       preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/license': {
+      id: '/license'
+      path: '/license'
+      fullPath: '/license'
+      preLoaderRoute: typeof LicenseRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/links': {
@@ -339,6 +359,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AmarildoHysaRoute: AmarildoHysaRoute,
   AppRoute: AppRoute,
+  LicenseRoute: LicenseRoute,
   LinksRoute: LinksRoute,
   LoginRoute: LoginRoute,
   PrivacyRoute: PrivacyRoute,

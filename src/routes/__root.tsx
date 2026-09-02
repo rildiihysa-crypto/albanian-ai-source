@@ -196,6 +196,8 @@ a.download-open{color:#fff;font-weight:700;text-decoration:none;margin-top:12px}
                   creator: { "@type": "Person", name: CREATOR.name },
                   copyrightHolder: { "@type": "Person", name: CREATOR.name },
                   creditText: "Amarildo Hysa / Albanian AI",
+                  copyrightNotice: "© 2026 Amarildo Hysa. Albanian AI. Të gjitha të drejtat e rezervuara.",
+                  license: `${PUBLIC_SITE}/license`,
                   acquireLicensePage: PUBLIC_SITE,
                 },
                 {
