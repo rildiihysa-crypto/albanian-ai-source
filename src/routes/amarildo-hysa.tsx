@@ -10,6 +10,12 @@ export const Route = createFileRoute("/amarildo-hysa")({
         content:
           "Amarildo Hysa, 23 vjeç, lindur në Elbasan më 13.12.2002. Banues i qytezës së Belshit, por nuk jeton në Belsh. Krijues i Albanian AI.",
       },
+      {
+        name: "keywords",
+        content: "Amarildo Hysa, krijuesi i Albanian AI, Albanian AI creator, AlbanianAI, Albanian AI, Elbasan, Belsh",
+      },
+      { name: "author", content: "Amarildo Hysa" },
+      { name: "robots", content: "index,follow,max-image-preview:large" },
       { property: "og:title", content: "Amarildo Hysa" },
       {
         property: "og:description",
@@ -25,22 +31,27 @@ function ProfilePage() {
   const personLd = {
     "@context": "https://schema.org",
     "@type": "Person",
+    "@id": `${PUBLIC_SITE}/amarildo-hysa#person`,
     name: CREATOR.name,
+    alternateName: ["Amarildo", "Amarildo Hysa — krijuesi i Albanian AI"],
     jobTitle: "Krijues i Albanian AI",
+    description: "Amarildo Hysa është krijuesi i Albanian AI, një asistent inteligjent online në shqip, italisht dhe anglisht.",
     nationality: "Albanian",
     birthPlace: { "@type": "Place", name: CREATOR.born },
     homeLocation: { "@type": "Place", name: `${CREATOR.from}, ${CREATOR.based}` },
     email: CREATOR.email,
     url: `${PUBLIC_SITE}/amarildo-hysa`,
     sameAs: [CREATOR.instagram, CREATOR.facebook, CREATOR.tiktok, CREATOR.youtube],
+    knowsAbout: ["Albanian AI", "inteligjencë artificiale", "teknologji", "gjuhë shqipe"],
     knowsLanguage: ["sq", "it", "en"],
-    founder: { "@type": "SoftwareApplication", name: "Albanian AI", url: PUBLIC_SITE },
+    founder: { "@id": `${PUBLIC_SITE}/#organization` },
+    worksFor: { "@id": `${PUBLIC_SITE}/#organization` },
   };
 
   return (
     <main className="wiki-page">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personLd) }} />
-      <p className="wiki-kicker">Profil zyrtar</p>
+      <p className="wiki-kicker">Amarildo Hysa · Krijuesi i Albanian AI</p>
       <h1>Amarildo Hysa</h1>
       <aside className="wiki-box">
         <img src="/logo-192.jpg" alt="Albanian AI" width={160} height={160} />
@@ -96,7 +107,7 @@ function ProfilePage() {
         Nuk jeton në Tiranë. Nuk ka nofka publike. Universiteti, profesione të tjera ose detaje të pabëra publike
         nga ky profil nuk janë pjesë e të dhënave zyrtare të Albanian AI.
       </p>
-      <h2>Albanian AI</h2>
+      <h2>Albanian AI — krijimi i Amarildo Hysës</h2>
       <p>
         Albanian AI është një asistent privat me zë live, chat, foto dhe kamerë. Hapë te{" "}
         <a href={PUBLIC_SITE}>www.albanianai.it</a>. Nuk është produkt i OpenAI, Google apo xAI; është krijuar nga

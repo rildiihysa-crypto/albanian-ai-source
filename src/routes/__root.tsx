@@ -200,12 +200,16 @@ a.download-open{color:#fff;font-weight:700;text-decoration:none;margin-top:12px}
                 },
                 {
                   "@type": "Person",
+                  "@id": `${PUBLIC_SITE}/amarildo-hysa#person`,
                   name: CREATOR.name,
+                  jobTitle: "Krijues i Albanian AI",
+                  description: "Krijuesi i Albanian AI, asistent inteligjent online në shqip, italisht dhe anglisht.",
                   email: CREATOR.email,
                   birthPlace: CREATOR.born,
                   homeLocation: `${CREATOR.from}, ${CREATOR.based}`,
                   url: `${PUBLIC_SITE}/amarildo-hysa`,
                   sameAs: [CREATOR.instagram, CREATOR.facebook, CREATOR.tiktok, CREATOR.youtube],
+                  knowsAbout: ["Albanian AI", "inteligjencë artificiale", "teknologji", "gjuhë shqipe"],
                 },
                 {
                   "@type": "FAQPage",
