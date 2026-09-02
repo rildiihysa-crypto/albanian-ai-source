@@ -390,9 +390,15 @@ function staffCopy(lang) {
 	};
 }
 const ZERI_LIVE = "https://berry-forest-velvet-zippy.grok.me/";
+const LOCAL_GUEST_NAME_KEY = "albanian-ai-guest-name";
 export function Workspace() {
-	const { user, isPending } = useCurrentUserState();
-	const isGuest = !user;
+		const { user, isPending } = useCurrentUserState();
+		const isGuest = !user;
+		const [localGuestName] = useState(() => {
+			if (typeof window === "undefined") return "";
+			try { return localStorage.getItem(LOCAL_GUEST_NAME_KEY)?.trim() || ""; } catch { return ""; }
+		});
+		const profileName = user?.displayName || localGuestName;
 	const [prefs, setPrefs] = useState(() => typeof window === "undefined" ? DEFAULT_PREFS : readLocalPrefs());
 	const [histories, setHistories] = useState([]);
 	const [memories, setMemories] = useState([]);
