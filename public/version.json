@@ -1,6 +1,6 @@
 {
   "name": "Albanian AI",
-  "version": "1.60.0",
-  "build": 235,
-  "notes": "Hyrja lokale me emër dhe mbiemër aktivizon profilin lokal."
+  "version": "1.61.0",
+  "build": 236,
+  "notes": "Rregullim i serverit që chat-i të kthejë përgjigje normale."
 }
