@@ -12,7 +12,7 @@ export function Landing({ onEnter }: { onEnter: () => void }) {
         <h1 style={{ color: "#fff" }}>Albanian AI</h1>
         <p style={{ color: "#bdbdbd" }}>Krijuar nga {CREATOR.name}</p>
         <p style={{ color: "#cfcfd4", maxWidth: 340, fontSize: 14, lineHeight: 1.5, margin: "0 auto 8px" }}>
-          Stafi i Albanian AI kërkon ndjesë që nuk punon aq mirë tani. Jemi në fazën e testimit dhe shumë gjëra të reja do t’i integrohen. Faleminderit për mirëkuptimin dhe suportin tuaj. ❤️🇦🇱
+          Albanian AI është asistenti shqiptar për biseda, zë live, foto dhe kamera — në shqip, italisht dhe anglisht.
         </p>
         <button
           type="button"

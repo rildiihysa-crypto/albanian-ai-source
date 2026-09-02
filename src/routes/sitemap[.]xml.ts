@@ -16,7 +16,8 @@ export const Route = createFileRoute("/sitemap.xml")({
         const origin = originFrom(request);
         const now = new Date().toISOString().slice(0, 10);
         const body = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+	<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+	        xmlns:xhtml="http://www.w3.org/1999/xhtml"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://www.albanianai.it/</loc>
@@ -35,10 +36,13 @@ export const Route = createFileRoute("/sitemap.xml")({
     </image:image>
   </url>
   <url>
-    <loc>https://albanianai.it/</loc>
+    <loc>https://www.albanianai.it/</loc>
     <lastmod>${now}</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://www.albanianai.it/" />
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.albanianai.it/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.albanianai.it/" />
   </url>
   <url>
     <loc>https://www.albanianai.it/amarildo-hysa</loc>

@@ -79,6 +79,8 @@ export const Route = createRootRoute({
       { name: "apple-mobile-web-app-title", content: APP_NAME },
       { name: "application-name", content: APP_NAME },
       { name: "author", content: "Amarildo Hysa" },
+      { name: "creator", content: "Amarildo Hysa" },
+      { name: "subject", content: "Albanian AI — asistent inteligjent në shqip" },
       { name: "format-detection", content: "telephone=no" },
     ],
     links: [
@@ -136,11 +138,28 @@ a.download-open{color:#fff;font-weight:700;text-decoration:none;margin-top:12px}
               "@graph": [
                 {
                   "@type": "WebSite",
+                  "@id": `${PUBLIC_SITE}/#website`,
                   name: "Albanian AI",
+                  alternateName: ["AlbanianAI", "Albanian AI app", "asistent Albanian AI"],
                   url: PUBLIC_SITE,
                   inLanguage: ["sq", "it", "en"],
                   description:
                     "Albanian AI është asistent inteligjent falas në shqip, italisht dhe anglisht. Krijuar nga Amarildo Hysa.",
+                  potentialAction: {
+                    "@type": "SearchAction",
+                    target: `${PUBLIC_SITE}/?q={search_term_string}`,
+                    "query-input": "required name=search_term_string",
+                  },
+                },
+                {
+                  "@type": "Organization",
+                  "@id": `${PUBLIC_SITE}/#organization`,
+                  name: "Albanian AI",
+                  alternateName: "AlbanianAI",
+                  url: PUBLIC_SITE,
+                  logo: `${PUBLIC_SITE}/logo-192.jpg`,
+                  founder: { "@type": "Person", name: CREATOR.name },
+                  sameAs: [CREATOR.instagram, CREATOR.facebook, CREATOR.tiktok, CREATOR.youtube],
                 },
                 {
                   "@type": "SoftwareApplication",
