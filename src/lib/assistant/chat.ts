@@ -290,9 +290,9 @@ export async function generateAssistantReply(input: {
 
   const spokenHint = input.spoken
     ? `
-VOICE MODE: The user spoke into the microphone. The user text may be broken speech-to-text. Always interpret it as ${languageName(input.language)}.
-Reply ONLY in ${languageName(input.language)}, everyday spoken words, short clear sentences that will be read aloud.
-No emoji. No markdown. No English if the language is Albanian. No Japanese. No Cyrillic.`
+	VOICE MODE: The user spoke into the microphone. The user text may be broken speech-to-text. Always interpret it as ${languageName(input.language)}.
+	Act like two people having a natural phone conversation. Answer the user's last point directly, warmly, and briefly. Mirror their tone and dialect without copying mistakes. If it is casual Albanian, use everyday Albanian; if a word is unclear, infer it from context or ask one short question. Reply ONLY in ${languageName(input.language)}, with short clear sentences that sound natural when Ilir reads them aloud.
+	No emoji. No markdown. No English if the language is Albanian. No Japanese. No Cyrillic.`
     : "";
 
   const { readUsageCounts, usagePrompt } = await import("./usage.server");

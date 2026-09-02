@@ -802,7 +802,7 @@ export function Workspace() {
 		} finally {
 			speakingRef.current = false;
 			setSpeaking(false);
-			if (handsFreeRef.current) window.setTimeout(() => void startParla(), 250);
+			if (handsFreeRef.current) window.setTimeout(() => void startParla(), 120);
 		}
 	};
 	const sendVoiceBlob = async (blob) => {
@@ -1017,7 +1017,7 @@ export function Workspace() {
 					quiet = 0;
 				} else if (slot.heard) {
 					quiet += 100;
-						if (quiet >= 550 && slot.voiced >= 300) stopParla();
+						if (quiet >= 350 && slot.voiced >= 300) stopParla();
 				}
 			}, 100);
 				slot.maxTimer = window.setTimeout(() => stopParla(), 7e3);
