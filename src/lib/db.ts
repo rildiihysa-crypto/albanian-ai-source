@@ -229,7 +229,12 @@ export function ensureDbReady(): Promise<void> {
 const globalBoot = globalThis as typeof globalThis & {
   __pgBootstrapPromise__?: Promise<void>;
 };
-if (typeof window === "undefined" && dbSource === "pglite") {
+// Do not eagerly initialize PGLite in Vercel serverless without a persistent
+// database. Its WASM data asset is not available in the server bundle, and an
+// unhandled bootstrap rejection breaks unrelated public routes such as chat.
+// PGLite remains available for local development; production should use Neon
+// when persistence-backed server functions are needed.
+if (typeof window === "undefined" && dbSource === "pglite" && !process.env.VERCEL) {
   globalBoot.__pgBootstrapPromise__ ??= ensureDbReady().catch((err) => {
     globalBoot.__pgBootstrapPromise__ = undefined;
     console.error("[db] PGLite bootstrap failed:", err);
