@@ -475,7 +475,7 @@ function whisperLang(lang?: Lang) {
 function sttPrompt(lang?: Lang) {
   if (lang === "it") return "Trascrizione italiana fedele, parole esatte.";
   if (lang === "en") return "Exact English transcription of the speaker.";
-  return "Transcribe ONLY spoken Albanian (shqip), Latin letters, ë ç. Output the words the person said. Common: Përshëndetje. Si je. Faleminderit. Unë. Ti. Çfarë. Po. Jo. Mirë. Ju lutem. Si quhesh. Çfarë bën. Never Cyrillic. Never Japanese. Never 1-3 random letters.";
+  return "Transcribe ONLY spoken Albanian (shqip), exactly as spoken, using Latin letters and ë, ç. Do not invent words, translate, summarize, or answer. Keep the full phrase and normal spaces. Common: Përshëndetje. Si je. Faleminderit. Unë. Ti. Çfarë. Po. Jo. Mirë. Ju lutem. Si quhesh. Çfarë bën. Never Cyrillic. Never Japanese. Never 1-3 random letters.";
 }
 
 function mapCommonSq(text: string) {
@@ -874,4 +874,3 @@ export const getOwnerUsage = createServerFn({ method: "POST" })
       return EMPTY_USAGE;
     }
   });
-

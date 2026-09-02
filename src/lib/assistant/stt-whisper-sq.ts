@@ -15,7 +15,8 @@ export async function transcribeWhisperSq(bytes: Buffer, mime: string, ext: stri
         "Content-Type": audioContentType(mime),
       },
       body: new Uint8Array(bytes),
-      signal: AbortSignal.timeout(22_000),
+      // Avoid blocking live conversation on a cold Hugging Face model.
+      signal: AbortSignal.timeout(8_000),
     }).catch(() => null);
     if (response?.ok) {
       const body = await response.json() as { text?: string } | { text?: string }[] | string;

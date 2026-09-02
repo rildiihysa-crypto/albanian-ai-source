@@ -1017,10 +1017,10 @@ export function Workspace() {
 					quiet = 0;
 				} else if (slot.heard) {
 					quiet += 100;
-					if (quiet >= 900 && slot.voiced >= 300) stopParla();
+						if (quiet >= 550 && slot.voiced >= 300) stopParla();
 				}
 			}, 100);
-			slot.maxTimer = window.setTimeout(() => stopParla(), 8e3);
+				slot.maxTimer = window.setTimeout(() => stopParla(), 7e3);
 			mediaRef.current = slot;
 			setHearing(true);
 			setVoiceLive(true);
@@ -1098,7 +1098,7 @@ export function Workspace() {
 				await acquireMic();
 				setHearing(true);
 				const lang = prefsRef.current.language === "it" || prefsRef.current.language === "en" ? prefsRef.current.language : "sq";
-				const hello = lang === "it" ? "Ciao, sono Albanian AI. Parla pure." : lang === "en" ? "Hi, I am Albanian AI. Speak now." : "Përshëndetje, unë jam Albanian AI. Fol tani.";
+					const hello = lang === "it" ? "Ciao, sono Albanian AI. Come posso aiutarti?" : lang === "en" ? "Hello, I am Albanian AI. How can I help you?" : "Përshëndetje, unë jam Albanian AI. Si mund t'ju ndihmoj?";
 				setVoiceLog([{ role: "assistant", content: hello }]);
 				pushLiveToChat("assistant", hello);
 				lastSpokenRef.current = hello;

@@ -68,7 +68,7 @@ export const DEFAULT_PREFS: Prefs = {
   voiceId: "ilir",
 };
 
-export const FIRST_ASSISTANT_MESSAGE = `Përshëndetje, unë jam Albanian AI.`;
+export const FIRST_ASSISTANT_MESSAGE = `Përshëndetje, unë jam Albanian AI. Si mund t'ju ndihmoj?`;
 
 export const VOICE_OPTIONS = [
   { id: "ilir", label: "Ilir", gender: "m" as const, plans: ["lite", "flash", "pro"] as ChatMode[] },
@@ -93,7 +93,7 @@ export function voiceName(_voiceId?: string) {
 }
 
 export function greetingFor(_voiceId: string | undefined, lang: Lang, _mode?: ChatMode) {
-  if (lang === "it") return "Ciao, sono Ilir, Albanian AI.";
-  if (lang === "en") return "Hello, I'm Ilir, Albanian AI.";
-  return "Përshëndetje, unë jam Ilir, Albanian AI.";
+	if (lang === "it") return "Ciao, sono Albanian AI. Come posso aiutarti?";
+	if (lang === "en") return "Hello, I am Albanian AI. How can I help you?";
+	return "Përshëndetje, unë jam Albanian AI. Si mund t'ju ndihmoj?";
 }
