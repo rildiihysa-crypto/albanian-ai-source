@@ -399,6 +399,7 @@ export function Workspace() {
 			try { return localStorage.getItem(LOCAL_GUEST_NAME_KEY)?.trim() || ""; } catch { return ""; }
 		});
 		const profileName = user?.displayName || localGuestName;
+		const needsAccount = isGuest && !localGuestName;
 	const [prefs, setPrefs] = useState(() => typeof window === "undefined" ? DEFAULT_PREFS : readLocalPrefs());
 	const [histories, setHistories] = useState([]);
 	const [memories, setMemories] = useState([]);
@@ -665,7 +666,7 @@ export function Workspace() {
 		const doc = pendingDoc;
 		if (!value && !photo && !doc || sendingRef.current) return;
 		const used = messages.filter((item) => item.role === "assistant" && !isLiveMessage(item.id)).length;
-		if (isGuest && used >= GUEST_LIMIT) {
+		if (needsAccount && used >= GUEST_LIMIT) {
 			setLoginGate(true);
 			return;
 		}
@@ -1466,16 +1467,16 @@ export function Workspace() {
 								onClick: () => setStatsOpen(true),
 								children: [/* @__PURE__ */ jsx(Users, { size: 17 }), " Përdoruesit"]
 							}) : null,
-							/* @__PURE__ */ jsxs("button", {
-								className: "nav-item",
-								type: "button",
-								onClick: () => isGuest ? setLoginGate(true) : setSettingsOpen(true),
-								children: [/* @__PURE__ */ jsx(Settings2, { size: 17 }), " Cilësimet"]
-							}),
-							/* @__PURE__ */ jsxs("button", {
-								className: "profile",
-								type: "button",
-								onClick: () => isGuest ? setLoginGate(true) : setSettingsOpen(true),
+								/* @__PURE__ */ jsxs("button", {
+									className: "nav-item",
+									type: "button",
+									onClick: () => needsAccount ? setLoginGate(true) : setSettingsOpen(true),
+									children: [/* @__PURE__ */ jsx(Settings2, { size: 17 }), " Cilësimet"]
+								}),
+								/* @__PURE__ */ jsxs("button", {
+									className: "profile",
+									type: "button",
+									onClick: () => needsAccount ? setLoginGate(true) : setSettingsOpen(true),
 								children: [/* @__PURE__ */ jsx("div", {
 									className: "avatar",
 									children: (user?.displayName || "A").slice(0, 1).toUpperCase()
