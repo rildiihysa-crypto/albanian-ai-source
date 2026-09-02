@@ -841,41 +841,26 @@ export function Workspace() {
 			if (handsFreeRef.current) window.setTimeout(() => void startParla(), 800);
 		}
 	};
-	const stopParla = () => {
-		const current = mediaRef.current;
+		const stopParla = () => {
+			const current = mediaRef.current;
 		if (!current) {
 			setHearing(false);
 			return;
 		}
 		if (current.vad) window.clearInterval(current.vad);
 		if (current.maxTimer) window.clearTimeout(current.maxTimer);
-		try {
-			current.processor?.disconnect();
-		} catch {}
-		mediaRef.current = null;
-		setHearing(false);
-		if (current.recorder && current.recorder.state !== "inactive") {
-			current.recorder.ondataavailable = null;
-			current.recorder.onstop = null;
-			try {
-				current.recorder.stop();
-			} catch {}
-		}
-		const merged = current.pcm.reduce((total, chunk) => total + chunk.length, 0);
-		if (merged < current.sampleRate * .28) {
-			setMicError("Fol përsëri — të dëgjoj tani.");
-			if (handsFreeRef.current) window.setTimeout(() => void startParla(), 400);
-			return;
-		}
-		const pcm = new Float32Array(merged);
-		let offset = 0;
-		for (const chunk of current.pcm) {
-			pcm.set(chunk, offset);
-			offset += chunk.length;
-		}
-		const wav = encodeWav(cleanSpeechPcm(downsample$1(pcm, current.sampleRate, 16e3)), 16e3);
-		sendVoiceBlob(wav);
-	};
+			mediaRef.current = null;
+			setHearing(false);
+			if (current.recorder && current.recorder.state !== "inactive") {
+				try {
+					current.recorder.stop();
+				} catch {}
+			}
+			else {
+				setMicError("Regjistrimi nuk u nis. Provo përsëri.");
+				if (handsFreeRef.current) window.setTimeout(() => void startParla(), 400);
+			}
+		};
 	const acquireMic = async () => {
 		const existing = liveMicRef.current;
 		if (existing?.getAudioTracks().some((track) => track.readyState === "live")) {
@@ -987,29 +972,33 @@ export function Workspace() {
 			const ctx = captureAudioContext();
 			if (!ctx) throw new Error("Audio");
 			await ctx.resume();
-			const source = ctx.createMediaStreamSource(stream);
-			const analyser = ctx.createAnalyser();
-			analyser.fftSize = 2048;
-			source.connect(analyser);
-			const samples = new Uint8Array(analyser.fftSize);
-			const pcm = [];
-			const processor = ctx.createScriptProcessor(4096, 1, 1);
-			const silent = ctx.createGain();
-			silent.gain.value = 0;
-			processor.onaudioprocess = (event) => {
-				if (speakingRef.current || Date.now() - ttsAt.current < 700) return;
-				pcm.push(new Float32Array(event.inputBuffer.getChannelData(0)));
-			};
-			source.connect(processor);
-			processor.connect(silent);
-			silent.connect(ctx.destination);
-			const slot = {
-				stream,
-				pcm,
-				sampleRate: ctx.sampleRate,
-				ctx,
-				processor,
-				heard: false,
+				const source = ctx.createMediaStreamSource(stream);
+				const analyser = ctx.createAnalyser();
+				analyser.fftSize = 2048;
+				source.connect(analyser);
+				const samples = new Uint8Array(analyser.fftSize);
+				const chunks = [];
+				const mimeType = pickRecorderMime();
+				const recorder = mimeType ? new MediaRecorder(stream, { mimeType }) : new MediaRecorder(stream);
+				recorder.ondataavailable = (event) => {
+					if (event.data?.size) chunks.push(event.data);
+				};
+				recorder.onstop = () => {
+					const blob = new Blob(chunks, { type: recorder.mimeType || mimeType || "audio/webm" });
+					if (blob.size < 600) {
+						setMicError("Fol përsëri — të dëgjoj tani.");
+						if (handsFreeRef.current) window.setTimeout(() => void startParla(), 400);
+						return;
+					}
+					void sendVoiceBlob(blob);
+				};
+				recorder.start(250);
+				const slot = {
+					stream,
+					chunks,
+					recorder,
+					ctx,
+					heard: false,
 				voiced: 0,
 				vad: 0,
 				maxTimer: 0
