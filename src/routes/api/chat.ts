@@ -95,7 +95,7 @@ async function geminiReply(prompt: string, lang: string, history: { role: string
   }
   contents.push({ role: "user", parts: [{ text: prompt.slice(0, 4000) }] });
   if (contents[0]?.role !== "user") contents.unshift({ role: "user", parts: [{ text: "Përshëndetje" }] });
-  for (const model of ["gemini-3.5-flash-lite", "gemini-3.6-flash"]) {
+  for (const model of ["gemini-2.5-flash", "gemini-2.0-flash"]) {
     try {
       const res = await fetch(
         `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(key)}`,
@@ -129,7 +129,7 @@ async function groqReply(prompt: string, lang: string, history: { role: string; 
       method: "POST",
       headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
       body: JSON.stringify({
-        model: "openai/gpt-oss-20b",
+        model: "llama-3.3-70b-versatile",
         temperature: 0.35,
         max_tokens: 500,
         messages: [
