@@ -670,7 +670,9 @@ export function Workspace() {
 		setPendingDoc(void 0);
 		unlockAudio();
 		listenRef.current?.pause();
-		const stored = photo ? `[[AAI_IMG]]${photo}[[/AAI_IMG]]${value || "Foto"}` : value;
+		// Camera instructions are context for vision only; do not print them below the photo.
+		const visiblePhotoText = imageDataUrl ? "" : value;
+		const stored = photo ? `[[AAI_IMG]]${photo}[[/AAI_IMG]]${visiblePhotoText}` : value;
 		const prompt = doc ? `${value || "Lexo këtë skedar dhe përgjigju."}\n\n--- Skedar: ${doc.name} ---\n${doc.text.slice(0, 12e3)}` : value || "Çfarë sheh në këtë foto?";
 		try {
 			if (isGuest) {

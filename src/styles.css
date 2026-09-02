@@ -1019,3 +1019,27 @@ body:has(.xai-live) .live-cam-pip{
   color:#ff8a80;
 }
 .acct-danger{color:#f28b82!important}
+
+/* Albanian AI visual refresh: glass chat bubbles and round Live orb */
+.user-bubble,
+.assistant-content,
+.chat-scroll.live-mode .user-bubble,
+.chat-scroll.live-mode .assistant-content {
+  background: rgba(255, 255, 255, 0.10) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(125%);
+  backdrop-filter: blur(16px) saturate(125%);
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.16) !important;
+}
+.user-bubble { color: #f7f7f8 !important; }
+.assistant-content { color: #f7f7f8 !important; }
+.user-bubble .user-content:empty { display: none; }
+.gen-card figcaption { display: none; }
+.xai-orb,
+.live-orb {
+  border-radius: 50% !important;
+  clip-path: circle(50% at 50% 50%);
+  overflow: hidden;
+}
+.xai-live-msg > img,
+.xai-live-you { border-radius: 50% !important; }
