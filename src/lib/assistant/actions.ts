@@ -229,14 +229,14 @@ export const guestReply = createServerFn({ method: "POST" })
           });
       guestCounts.set(data.guestId, used + 1);
       return {
-        response: response || "Nuk arrita të gjeneroj përgjigjen. Provo përsëri.",
+        response: response || "Përshëndetje! Stafi i Albanian AI po kryen disa përditësime për të rregulluar disa probleme teknike. Do të rikthehemi shumë shpejt për t'ju ndihmuar. Faleminderit për mirëkuptimin dhe durimin tuaj.",
         remaining: GUEST_REPLY_LIMIT - used - 1,
         audioBase64: undefined as string | undefined,
       };
     } catch (error) {
       if (error instanceof Error && error.message === "LOGIN_REQUIRED") throw error;
       return {
-        response: publicChatError(error) || "Përshëndetje, unë jam Albanian AI. Si mund t'ju ndihmoj?",
+        response: "Përshëndetje! Stafi i Albanian AI po kryen disa përditësime për të rregulluar disa probleme teknike. Do të rikthehemi shumë shpejt për t'ju ndihmuar. Faleminderit për mirëkuptimin dhe durimin tuaj.",
         remaining: 5,
         audioBase64: undefined as string | undefined,
       };

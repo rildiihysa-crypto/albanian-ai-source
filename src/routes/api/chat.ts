@@ -62,10 +62,10 @@ function localReply(prompt: string, lang: string) {
   if (lang === "it") return "Ti ascolto. Dimmi meglio cosa ti serve.";
   if (lang === "en") return "I hear you. Tell me what you need.";
   return lang === "it"
-    ? "Sono qui per aiutarti. Dimmi pure cosa ti serve."
+    ? "Ciao! Lo staff di Albanian AI sta effettuando alcuni aggiornamenti per risolvere alcuni problemi tecnici. Torneremo presto per aiutarti. Grazie per la comprensione."
     : lang === "en"
-      ? "I’m here to help. Tell me what you need."
-      : "Jam këtu për të të ndihmuar. Më thuaj çfarë të duhet.";
+      ? "Hello! The Albanian AI team is carrying out updates to fix some technical issues. We will be back soon to help you. Thank you for your understanding."
+      : "Përshëndetje! Stafi i Albanian AI po kryen disa përditësime për të rregulluar disa probleme teknike. Do të rikthehemi shumë shpejt për t'ju ndihmuar. Faleminderit për mirëkuptimin dhe durimin tuaj.";
 }
 
 const SYSTEM = (lang: string) =>

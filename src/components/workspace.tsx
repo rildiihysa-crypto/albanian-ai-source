@@ -271,7 +271,7 @@ function localBrain(text, lang) {
 	}
 	if (lang === "it") return "Sono qui per aiutarti. Dimmi pure cosa ti serve.";
 	if (lang === "en") return "I’m here to help. Tell me what you need.";
-	return "Jam këtu për të të ndihmuar. Më thuaj çfarë të duhet.";
+	return "";
 }
 var speakGen = 0;
 var cambQueue = [];
@@ -699,7 +699,7 @@ export function Workspace() {
 				};
 				const pending = [...messages, localUser];
 				setMessages(pending);
-				const reply = await askBrain(prompt, prefsRef.current.language, messages) || localBrain(prompt, prefsRef.current.language) || "Përshëndetje, unë jam Albanian AI. Si mund t'ju ndihmoj?";
+				const reply = await askBrain(prompt, prefsRef.current.language, messages) || localBrain(prompt, prefsRef.current.language) || "Përshëndetje! Stafi i Albanian AI ju njofton se po kryejmë disa përditësime për të rregulluar disa probleme teknike. Do të rikthehemi shumë shpejt për t'ju ndihmuar. Faleminderit për mirëkuptimin dhe durimin tuaj.";
 				const assistant = {
 					id: `guest-a-${Date.now()}`,
 					conversation_id: "guest",
@@ -742,7 +742,7 @@ export function Workspace() {
 				created_at: (/* @__PURE__ */ new Date()).toISOString()
 			};
 			setMessages((prev) => [...prev, localUser]);
-			const reply = await askBrain(prompt, prefsRef.current.language, messages) || localBrain(prompt, prefsRef.current.language) || "Përshëndetje, unë jam Albanian AI. Si mund t'ju ndihmoj?";
+			const reply = await askBrain(prompt, prefsRef.current.language, messages) || localBrain(prompt, prefsRef.current.language) || "Përshëndetje! Stafi i Albanian AI ju njofton se po kryejmë disa përditësime për të rregulluar disa probleme teknike. Do të rikthehemi shumë shpejt për t'ju ndihmuar. Faleminderit për mirëkuptimin dhe durimin tuaj.";
 			if (!String(conversationId).startsWith("local-")) {
 				sendMessage({ data: {
 					id: conversationId,
@@ -799,13 +799,11 @@ export function Workspace() {
 			const history = [...voiceLogRef.current, { role: "user", content: clean }].slice(-12);
 			let reply = await askBrain(clean, lang, history);
 			if (!reply || /pas një sekondi|try again/i.test(reply)) reply = localBrain(clean, lang);
-			if (!reply) {
-				reply = lang === "it"
-					? "Ti ascolto. Dimmi pure."
+				if (!reply) reply = lang === "it"
+					? "Ciao! Lo staff di Albanian AI sta effettuando alcuni aggiornamenti per risolvere alcuni problemi tecnici. Torneremo presto per aiutarti. Grazie per la comprensione."
 					: lang === "en"
-						? "I hear you. Go ahead."
-						: "Të dëgjova. Fol, jam këtu.";
-			}
+						? "Hello! The Albanian AI team is carrying out updates to fix some technical issues. We will be back soon to help you. Thank you for your understanding."
+						: "Përshëndetje! Stafi i Albanian AI po kryen disa përditësime për të rregulluar disa probleme teknike. Do të rikthehemi shumë shpejt për t'ju ndihmuar. Faleminderit për mirëkuptimin.";
 			setVoiceLog((rows) => [...rows, { role: "assistant", content: reply }].slice(-24));
 			pushLiveToChat("assistant", reply);
 			persistLiveTurn(clean, reply);
