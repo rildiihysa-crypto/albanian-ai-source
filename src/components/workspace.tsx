@@ -219,6 +219,11 @@ function localBrain(text, lang) {
 		if (lang === "en") return "I'm Albanian AI, created by Amarildo Hysa. I'm here for you.";
 		return "Unë jam Albanian AI, krijuar nga Amarildo Hysa. Jam këtu për ty.";
 	}
+	if (/më trego|me trego|rreth vetes|çfarë di të bësh|cfar di te besh|what can you do|cosa sai fare/i.test(t)) {
+		if (lang === "it") return "Jam këtu për të të ndihmuar me pyetje, shkrime, përkthime dhe ide. Më thuaj çfarë të duhet.";
+		if (lang === "en") return "I can help with questions, writing, translations, and ideas. Tell me what you need.";
+		return "Jam këtu për të të ndihmuar me pyetje, shkrime, përkthime dhe ide. Më thuaj çfarë të duhet.";
+	}
 	if (/instagram|tiktok|youtube|facebook|email|gemail|posta/i.test(t) && /amarildo|krijues|creator|social/i.test(t)) {
 		return "Instagram: https://www.instagram.com/r.1ld1\nTikTok: https://www.tiktok.com/@accountremoved034\nYouTube: https://youtube.com/@777productionmusic\nFacebook: https://www.facebook.com/share/1EBjsAbdeN/\nEmail: Amarildo.hysa@pecsicura.com";
 	}
@@ -264,7 +269,9 @@ function localBrain(text, lang) {
 		if (lang === "en") return "Hello! I'm Albanian AI, created by Amarildo Hysa. How can I help?";
 		return "Përshëndetje! Unë jam Albanian AI, krijuar nga Amarildo Hysa. Si mund t'ju ndihmoj?";
 	}
-	return "";
+	if (lang === "it") return "Sono qui per aiutarti. Dimmi pure cosa ti serve.";
+	if (lang === "en") return "I’m here to help. Tell me what you need.";
+	return "Jam këtu për të të ndihmuar. Më thuaj çfarë të duhet.";
 }
 var speakGen = 0;
 var cambQueue = [];

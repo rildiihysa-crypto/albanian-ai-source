@@ -29,6 +29,11 @@ function localReply(prompt: string, lang: string) {
   if (/kush të krijoi|kush te krijoi|who created you|chi ti ha creato/i.test(t)) {
     return "Mua më ka krijuar një djal i ri shqiptar i cili quhet Amarildo Hysa.";
   }
+  if (/më trego|me trego|rreth vetes|çfarë di të bësh|cfar di te besh|what can you do|cosa sai fare/i.test(t)) {
+    if (lang === "it") return "Jam këtu për të të ndihmuar me pyetje, shkrime, përkthime dhe ide. Më thuaj çfarë të duhet.";
+    if (lang === "en") return "I can help with questions, writing, translations, and ideas. Tell me what you need.";
+    return "Jam këtu për të të ndihmuar me pyetje, shkrime, përkthime dhe ide. Më thuaj çfarë të duhet.";
+  }
   if (/sa (është|esht|eshte) ora|what time|che ore/i.test(t)) {
     if (lang === "it") return `Sono le ${when}.`;
     if (lang === "en") return `It's ${when}.`;
@@ -56,7 +61,11 @@ function localReply(prompt: string, lang: string) {
   }
   if (lang === "it") return "Ti ascolto. Dimmi meglio cosa ti serve.";
   if (lang === "en") return "I hear you. Tell me what you need.";
-  return "Të dëgjoj. Më thuaj çfarë të duhet, ta zgjidhim.";
+  return lang === "it"
+    ? "Sono qui per aiutarti. Dimmi pure cosa ti serve."
+    : lang === "en"
+      ? "I’m here to help. Tell me what you need."
+      : "Jam këtu për të të ndihmuar. Më thuaj çfarë të duhet.";
 }
 
 const SYSTEM = (lang: string) =>
